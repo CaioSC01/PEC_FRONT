@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import { useForm, NestedValue } from 'react-hook-form'
+import { TextField, FormControl, Select, MenuItem } from '@material-ui/core'
+import { Autocomplete } from '@material-ui/lab'
 import axios from 'axios'
 import { TrashIcon, PencilIcon } from '@heroicons/react/outline'
 import { SelectorIcon } from '@heroicons/react/solid'
 import { Combobox } from '@headlessui/react'
 
-export const TableClient = () => {
+export const TableClient = (id: any) => {
   const [NameCliente, setNameCliente] = useState<any[]>([])
-  const { control, register, handleSubmit } = useForm()
+  const { register, handleSubmit, watch, setValue } = useForm<FormValues>({
+    defaultValues: { autocomplete: [] }
+  })
   const [selectedPerson, setSelectedPerson] = useState<any[]>([])
-  const [selectedId, setSelectedId] = useState<any[]>([])
+  // const [selectedId, setSelectedId] = useState<any[]>([])
 
   useEffect(() => {
     axios
-      .get('https://localhost:44328/api/grupocliente')
+      .get(`https://localhost:44328/api/grupocliente`)
       .then(response => {
         // setCliente(response.data)
       })
@@ -27,13 +31,29 @@ export const TableClient = () => {
 
   const addCliente = (data: any) =>
     // axios
-    //   .post("https://localhost:44328/api/grupocliente", data)
-    //   .then((response) => {
-    console.log(data)
-  //   })
-  //   .catch((error) => {
-  //     console.log(error, data);
-  //   }); o
+    //   .post(`http://localhost:3006/Client`, data.autocomplete)
+    //   .then(response => {
+
+    console.log(data.autocomplete)
+  // })
+  // .catch(error => {
+  //   console.log(error, data)
+  // })
+
+  type Option = {
+    NM_GUERRA: string
+    CD_PESSOA: number
+  }
+
+  type FormValues = {
+    autocomplete: NestedValue<Option[]>
+  }
+
+  const options = [
+    { NM_GUERRA: 'Chocolate', CD_PESSOA: 1 },
+    { NM_GUERRA: 'Strawberry', CD_PESSOA: 2 },
+    { NM_GUERRA: 'Vanilla', CD_PESSOA: 3 }
+  ]
 
   const cliente = ['JOSIANE TAVARES', 'PORTELA INDUSTR']
 
@@ -42,36 +62,18 @@ export const TableClient = () => {
       <hr></hr>
 
       <form onSubmit={handleSubmit(addCliente)}>
-        <Combobox as="div" value={selectedPerson} onChange={setSelectedPerson}>
-          <Combobox.Label className="block text-sm font-medium text-gray-700">
-            Clientes
-          </Combobox.Label>
-          <div className="relative mt-1">
-            <Combobox.Input
-              {...register('cliente')}
-              className="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
-            />
-            <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
-              <SelectorIcon
-                className="h-5 w-5 text-gray-400"
-                aria-hidden="true"
-              />
-            </Combobox.Button>
-
-            <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-              {NameCliente.map(person => (
-                <Combobox.Option
-                  value={person.NM_GUERRA}
-                  className={
-                    'relative cursor-default select-none py-2 pl-3 pr-9'
-                  }
-                >
-                  <span className={'block truncate'}>{person.NM_GUERRA}</span>
-                </Combobox.Option>
-              ))}
-            </Combobox.Options>
-          </div>
-        </Combobox>
+        <section>
+          <label>MUI Autocomplete</label>
+          {/* {NameCliente.map(person => (
+           */}
+          <Autocomplete
+            multiple
+            options={NameCliente}
+            getOptionLabel={(option: Option) => option.NM_GUERRA}
+            onChange={(e, options) => setValue('autocomplete', options)}
+            renderInput={params => <TextField {...params} />}
+          />
+        </section>
 
         <button
           type="submit"

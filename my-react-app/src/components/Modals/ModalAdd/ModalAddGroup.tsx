@@ -75,8 +75,6 @@ export const ModalGroup = () => {
           Salvar
         </button>
       </form>
-
-      <TableClient></TableClient>
     </>
   )
 }

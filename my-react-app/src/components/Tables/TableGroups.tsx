@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { TrashIcon, PencilIcon } from '@heroicons/react/outline'
+import { TrashIcon, PencilIcon, PlusIcon } from '@heroicons/react/outline'
 import { Modal } from 'react-bootstrap'
 import { EditGroup } from '../Modals/ModalEdit/EditGroup'
 import { ModalDeleteGroup } from '../Modals/ModalDelete/DeleteGroup'
+import { TableClient } from './TableCliente'
 
 // import { ModalEditGroup } from './modals/ModalEdit/EditGroup'
 
@@ -18,6 +19,9 @@ export const TableGroups = () => {
   const [showD, setShowD] = useState(false)
   const handleShowD = () => setShowD(true)
   const handleCloseD = () => setShowD(false)
+  const [showP, setShowP] = useState(false)
+  const handleShowP = () => setShowP(true)
+  const handleCloseP = () => setShowP(false)
   const [groups, setGroups] = useState<any[]>([])
   const [dados, setDados] = useState<any[]>([])
   const [id, setId] = useState<any[]>([])
@@ -33,25 +37,7 @@ export const TableGroups = () => {
       })
   }, [])
 
-  // const deleteForm = (
-  //   id: any,
-  //   e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  // ) => {
-  //   e.preventDefault()
-  //   console.log(id)
-
-  //   if (!window.confirm('Deseja realmente excluir este post?')) return
-
-  //   try {
-  //     axios.delete(`https://localhost:44328/api/grupo/${id}`)
-  //     alert('Post excluído com sucesso')
-  //     refreshPage()
-  //   } catch (error) {
-  //     console.log(error)
-  //     alert('Não foi excluir o post.')
-  //   }
-  // }
-  const EditForm = (
+  const GetID = (
     id: any,
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -60,6 +46,7 @@ export const TableGroups = () => {
       setDados(response.data)
     })
   }
+
   return (
     <>
       <div className="w-full">
@@ -89,6 +76,12 @@ export const TableGroups = () => {
                         Status
                       </th>
 
+                      <th
+                        scope="col"
+                        className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider content_action"
+                      >
+                        Add Clientes
+                      </th>
                       <th
                         scope="col"
                         className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider content_action"
@@ -127,10 +120,23 @@ export const TableGroups = () => {
                                 {groups.Status === true ? 'Ativo' : 'Inativo'}
                               </div>
                             </td>
+                            <td className="px-9 py-4 whitespace-nowrap">
+                              <button
+                                onClick={e => GetID(groups.ID, e)}
+                                className="text-gray-400 hover:text-gray-100  mx-2"
+                              >
+                                <span className="sr-only">Close panel</span>
+                                <PlusIcon
+                                  className="h-6 w-6"
+                                  aria-hidden="true"
+                                  onClick={handleShowP}
+                                />
+                              </button>
+                            </td>
 
                             <td className="content_td">
                               <button
-                                onClick={e => EditForm(groups.ID, e)}
+                                onClick={e => GetID(groups.ID, e)}
                                 className="text-gray-400 hover:text-gray-100  mx-2"
                               >
                                 <span className="sr-only">Close panel</span>
@@ -143,7 +149,7 @@ export const TableGroups = () => {
 
                               <button
                                 className="text-gray-400 hover:text-gray-100  ml-2"
-                                onClick={e => EditForm(groups.ID, e)}
+                                onClick={e => GetID(groups.ID, e)}
                               >
                                 <span className="sr-only">Close panel</span>
                                 <TrashIcon
@@ -162,6 +168,28 @@ export const TableGroups = () => {
                 {dados.map(dados => {
                   return (
                     <>
+                      <Modal
+                        show={showP}
+                        onHide={handleCloseP}
+                        backdrop="static"
+                        keyboard={false}
+                      >
+                        <Modal.Header>
+                          <Modal.Title>Editar Grupo</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                          <TableClient id={dados} />
+                        </Modal.Body>
+                        <Modal.Footer>
+                          <button
+                            type="button"
+                            className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-[#9a8e74] hover:bg-[#b5aa92]focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            onClick={handleCloseP}
+                          >
+                            Cancelar
+                          </button>
+                        </Modal.Footer>
+                      </Modal>
                       <Modal
                         show={showE}
                         onHide={handleCloseE}

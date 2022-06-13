@@ -78,7 +78,6 @@ export const EditGroup = (id: any) => {
         </button>
       </form>
 
-      <TableClient></TableClient>
     </>
   )
 }

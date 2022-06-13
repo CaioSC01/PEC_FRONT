@@ -3,6 +3,7 @@ import { EyeIcon, PencilIcon, TrashIcon } from '@heroicons/react/solid'
 import axios from 'axios'
 import { Modal } from 'react-bootstrap'
 import { EditCamp } from '../Modals/ModalEdit/EditCamp'
+import { ModalDeleteCamp } from '../Modals/ModalDelete/DeleteCamp'
 // import { ModalEditCamp } from './modals/ModalEdit/EditCamp'
 
 function refreshPage() {
@@ -89,10 +90,14 @@ export const CardsCampanha = () => {
               <div className="-ml-px w-0 flex-1 flex">
                 <button
                   className="text-gray-400 hover:text-gray-100 px-10 ml-2"
-                  onClick={e => deleteForm(camp.ID, e)}
+                  onClick={e => EditForm(camp.ID, e)}
                 >
                   <span className="sr-only">Close panel</span>
-                  <TrashIcon className="h-6 w-6" aria-hidden="true" />
+                  <TrashIcon 
+                  className="h-6 w-6"
+                   aria-hidden="true"
+                   onClick={handleShowD}
+                   />
                 </button>
               </div>
             </div>
@@ -101,6 +106,7 @@ export const CardsCampanha = () => {
       ))}
       {dados.map(dados => {
         return (
+          <>
           <Modal
             show={showE}
             onHide={handleCloseE}
@@ -123,6 +129,38 @@ export const CardsCampanha = () => {
               </button>
             </Modal.Footer>
           </Modal>
+          
+          <Modal
+          show={showD}
+          onHide={handleCloseD}
+          backdrop="static"
+          keyboard={false}
+        >
+          <Modal.Header>
+            <Modal.Title>
+              Deletar Classificação <b></b>
+            </Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>
+            <ModalDeleteCamp id={dados} />
+          </Modal.Body>
+          <Modal.Footer>
+            <button
+              type="button"
+              className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-[#9a8e74] hover:bg-[#b5aa92]focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              onClick={handleCloseD}
+            >
+              Cancelar
+            </button>
+          </Modal.Footer>
+        </Modal>
+        <Modal>
+          <Modal.Title>
+            Vizualisar 
+          </Modal.Title>
+        </Modal>
+          </>
         )
       })}
     </ul>

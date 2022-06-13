@@ -41,7 +41,7 @@ export const EditCamp = (id: any) => {
             placeholder={id.id.Nome}
           />
         </div>
-        
+        {id.id.Fl_Ativo}
         <Controller
           render={({ field }) => (
             <select {...field} className="active_content">
@@ -52,6 +52,7 @@ export const EditCamp = (id: any) => {
           )}
           control={control}
           name="Fl_Ativo"
+          
         />
         <div className="relative border border-gray-300 rounded-md px-3 py-2 shadow-sm focus-within:ring-1 focus-within:ring-indigo-600 focus-within:border-indigo-600 modal_content">
           <label
@@ -67,7 +68,7 @@ export const EditCamp = (id: any) => {
             {...register('DT_Criacao')}
            
           />
-          {id.id.DT_Criacao}
+          
         </div>
 
         <div className="relative border border-gray-300 rounded-md px-3 py-2 shadow-sm focus-within:ring-1 focus-within:ring-indigo-600 focus-within:border-indigo-600 modal_content">
