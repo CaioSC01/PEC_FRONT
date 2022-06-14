@@ -1,51 +1,56 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import { TrashIcon, PencilIcon, PlusIcon } from '@heroicons/react/outline'
-import { Modal } from 'react-bootstrap'
-import { EditGroup } from '../Modals/ModalEdit/EditGroup'
-import { ModalDeleteGroup } from '../Modals/ModalDelete/DeleteGroup'
-import { TableClient } from './TableCliente'
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { TrashIcon, PencilIcon, PlusIcon } from "@heroicons/react/outline";
+import { Modal } from "react-bootstrap";
+import { EditGroup } from "../Modals/ModalEdit/EditGroup";
+import { ModalDeleteGroup } from "../Modals/ModalDelete/DeleteGroup";
+import { TableClient } from "./TableCliente";
 
 // import { ModalEditGroup } from './modals/ModalEdit/EditGroup'
 
 function refreshPage() {
-  window.location.reload()
+  window.location.reload();
 }
 
 export const TableGroups = () => {
-  const [showE, setShowE] = useState(false)
-  const handleShowE = () => setShowE(true)
-  const handleCloseE = () => setShowE(false)
-  const [showD, setShowD] = useState(false)
-  const handleShowD = () => setShowD(true)
-  const handleCloseD = () => setShowD(false)
-  const [showP, setShowP] = useState(false)
-  const handleShowP = () => setShowP(true)
-  const handleCloseP = () => setShowP(false)
-  const [groups, setGroups] = useState<any[]>([])
-  const [dados, setDados] = useState<any[]>([])
-  const [id, setId] = useState<any[]>([])
+  const [showE, setShowE] = useState(false);
+  const handleShowE = () => setShowE(true);
+  const handleCloseE = () => setShowE(false);
+  const [showD, setShowD] = useState(false);
+  const handleShowD = () => setShowD(true);
+  const handleCloseD = () => setShowD(false);
+  const [showP, setShowP] = useState(false);
+  const handleShowP = () => setShowP(true);
+  const handleCloseP = () => setShowP(false);
+  const [groups, setGroups] = useState<any[]>([]);
+  const [dados, setDados] = useState<any[]>([]);
+  const [clientes, setClientes] = useState<any[]>([]);
 
   useEffect(() => {
     axios
-      .get('https://localhost:44328/api/grupo')
-      .then(response => {
-        setGroups(response.data)
+      .get("https://localhost:44328/api/grupo")
+      .then((response) => {
+        setGroups(response.data);
+        axios
+          .get(`https://localhost:44328/api/GrupoCliente`)
+          .then((response) => {
+            setClientes(response.data);
+          });
       })
       .catch(() => {
-        console.log('DEU ERRADO')
-      })
-  }, [])
+        console.log("DEU ERRADO");
+      });
+  }, []);
 
   const GetID = (
     id: any,
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    e.preventDefault()
-    axios.get(`https://localhost:44328/api/grupo/${id}`).then(response => {
-      setDados(response.data)
-    })
-  }
+    e.preventDefault();
+    axios.get(`https://localhost:44328/api/grupo/${id}`).then((response) => {
+      setDados(response.data);
+    });
+  };
 
   return (
     <>
@@ -80,7 +85,7 @@ export const TableGroups = () => {
                         scope="col"
                         className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider content_action"
                       >
-                        Add Clientes
+                        Clientes
                       </th>
                       <th
                         scope="col"
@@ -90,7 +95,8 @@ export const TableGroups = () => {
                       </th>
                     </tr>
                   </thead>
-                  {groups.map(groups => {
+				   {/* {clientes.map((cliente) => { */}
+                  {groups.map((groups) => {
                     return (
                       <React.Fragment key={groups.ID}>
                         <tbody className="bg-white divide-y divide-gray-200">
@@ -113,16 +119,22 @@ export const TableGroups = () => {
                               <div
                                 className={
                                   groups.Status === true
-                                    ? 'inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-green-100 text-green-800'
-                                    : 'inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-red-100 text-red-800'
+                                    ? "inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-green-100 text-green-800"
+                                    : "inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-red-100 text-red-800"
                                 }
                               >
-                                {groups.Status === true ? 'Ativo' : 'Inativo'}
+                                {groups.Status === true ? "Ativo" : "Inativo"}
                               </div>
                             </td>
                             <td className="px-9 py-4 whitespace-nowrap">
+                              <div className="sm:col-span-2">
+                                <div>aaaaaaaaaaa</div>
+                              </div>
+                            </td>
+
+                            <td className="content_td">
                               <button
-                                onClick={e => GetID(groups.ID, e)}
+                                onClick={(e) => GetID(groups.ID, e)}
                                 className="text-gray-400 hover:text-gray-100  mx-2"
                               >
                                 <span className="sr-only">Close panel</span>
@@ -132,11 +144,8 @@ export const TableGroups = () => {
                                   onClick={handleShowP}
                                 />
                               </button>
-                            </td>
-
-                            <td className="content_td">
                               <button
-                                onClick={e => GetID(groups.ID, e)}
+                                onClick={(e) => GetID(groups.ID, e)}
                                 className="text-gray-400 hover:text-gray-100  mx-2"
                               >
                                 <span className="sr-only">Close panel</span>
@@ -149,7 +158,7 @@ export const TableGroups = () => {
 
                               <button
                                 className="text-gray-400 hover:text-gray-100  ml-2"
-                                onClick={e => GetID(groups.ID, e)}
+                                onClick={(e) => GetID(groups.ID, e)}
                               >
                                 <span className="sr-only">Close panel</span>
                                 <TrashIcon
@@ -162,10 +171,10 @@ export const TableGroups = () => {
                           </tr>
                         </tbody>
                       </React.Fragment>
-                    )
+                    );
                   })}
                 </table>
-                {dados.map(dados => {
+                {dados.map((dados) => {
                   return (
                     <>
                       <Modal
@@ -239,7 +248,7 @@ export const TableGroups = () => {
                         </Modal.Footer>
                       </Modal>
                     </>
-                  )
+                  );
                 })}
               </div>
             </div>
@@ -247,5 +256,5 @@ export const TableGroups = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
