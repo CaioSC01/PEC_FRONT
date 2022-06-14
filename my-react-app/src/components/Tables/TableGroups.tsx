@@ -5,7 +5,6 @@ import { Modal } from 'react-bootstrap'
 import { EditGroup } from '../Modals/ModalEdit/EditGroup'
 import { ModalDeleteGroup } from '../Modals/ModalDelete/DeleteGroup'
 import { TableClient } from './TableCliente'
-import UnopDropdown from 'unop-react-dropdown'
 import './tableclient.css'
 
 // import { ModalEditGroup } from './modals/ModalEdit/EditGroup'
@@ -26,7 +25,8 @@ export const TableGroups = () => {
   const handleCloseP = () => setShowP(false)
   const [groups, setGroups] = useState<any[]>([])
   const [dados, setDados] = useState<any[]>([])
-  const [clientes, setClientes] = useState<any[]>([])
+  const [Clientes, setClientes] = useState<any[]>([])
+  const [NameClientes, setNameClientes] = useState<any[]>([])
 
   useEffect(() => {
     axios
@@ -35,6 +35,9 @@ export const TableGroups = () => {
         setGroups(response.data)
         axios.get(`https://localhost:44328/api/GrupoCliente`).then(response => {
           setClientes(response.data)
+          axios.get(`https://localhost:44328/api/clientes`).then(response => {
+            setNameClientes(response.data)
+          })
         })
       })
       .catch(() => {
@@ -83,7 +86,13 @@ export const TableGroups = () => {
 
                       <th
                         scope="col"
-                        className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider content_action"
+                        className="px-1 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider content_action"
+                      >
+                        Clientes
+                      </th>
+                      <th
+                        scope="col"
+                        className="px- py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider content_action"
                       >
                         Ações
                       </th>
@@ -117,6 +126,29 @@ export const TableGroups = () => {
                                 }
                               >
                                 {groups.Status === true ? 'Ativo' : 'Inativo'}
+                              </div>
+                            </td>
+                            <td className="px-1 py-3 whitespace-nowrap">
+                              <div className="sm:col-span-2">
+                                {Clientes.map(clientes => {
+                                  return (
+                                    <>
+                                      {NameClientes.map(name => {
+                                        return (
+                                          <div className="text-sm font-medium text-gray-900 ">
+                                            {clientes.ID_Cliente ==
+                                              name.CD_PESSOA &&
+                                            clientes.ID_Grupo == groups.ID ? (
+                                              <p> {name.NM_GUERRA},</p>
+                                            ) : (
+                                              ''
+                                            )}
+                                          </div>
+                                        )
+                                      })}
+                                    </>
+                                  )
+                                })}
                               </div>
                             </td>
 
@@ -172,7 +204,7 @@ export const TableGroups = () => {
                         keyboard={false}
                       >
                         <Modal.Header>
-                          <Modal.Title>Adicionar Clientes</Modal.Title>
+                          <Modal.Title>Editar Grupo</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                           <TableClient id={dados} />
@@ -181,7 +213,7 @@ export const TableGroups = () => {
                           <button
                             type="button"
                             className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-[#9a8e74] hover:bg-[#b5aa92]focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                            onClick={handleCloseP}
+                            onClick={refreshPage}
                           >
                             Cancelar
                           </button>
@@ -203,7 +235,7 @@ export const TableGroups = () => {
                           <button
                             type="button"
                             className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-[#9a8e74] hover:bg-[#b5aa92]focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                            onClick={handleCloseE}
+                            onClick={refreshPage}
                           >
                             Cancelar
                           </button>

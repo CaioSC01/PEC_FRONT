@@ -1,113 +1,77 @@
-import { ChangeEvent, useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Controller, useForm } from 'react-hook-form'
 // import './Style/modalGroup.css'
 import { TableClient } from '../../Tables/TableCliente'
-import React from 'react'
 import { TrashIcon } from '@heroicons/react/outline'
 
 function refreshPage() {
   window.location.reload()
 }
 export const EditGroup = (id: any) => {
-  const { control, register } = useForm()
+  const { control, register, handleSubmit } = useForm()
+  const [IDClientes, setSelectedIDClientes] = useState<any[]>([])
+  const [selectedClientes, setSelectedClientes] = useState<any[]>([])
+  const [Clientes, setClientes] = useState<any[]>([])
   const [NameCliente, setNameCliente] = useState<any[]>([])
-  const { handleSubmit } = useForm()
-  const [selectedPerson, setSelectedPerson] = useState<any[]>([])
-  const [groups, setGroups] = useState<any[]>([])
-  const [dados, setDados] = useState<any[]>([])
-  const [clientes, setClientes] = useState<any[]>([])
 
   useEffect(() => {
     axios
-      .get('https://localhost:44328/api/grupo')
+      .get(`https://localhost:44328/api/GrupoCliente/${id.id.ID}`)
       .then(response => {
-        setGroups(response.data)
-        axios
-          .get(`https://localhost:44328/api/GrupoCliente/${id.id.ID}`)
-          .then(response => {
-            setClientes(response.data)
-          })
+        setClientes(response.data)
+        axios.get('https://localhost:44328/api/clientes').then(response => {
+          setNameCliente(response.data)
+        })
       })
       .catch(() => {
         console.log('DEU ERRADO')
       })
   }, [])
 
-  const GetID = (
-    id: any,
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.preventDefault()
+  const fetchClientes = () => {
     axios
-      .get(`https://localhost:44328/api/grupo/${id.id.ID}`)
+      .get(`https://localhost:44328/api/GrupoCliente/${id.id.ID}`)
       .then(response => {
-        setDados(response.data)
-        refreshPage()
-      })
-  }
-
-  useEffect(() => {
-    axios
-      .get(`https://localhost:44328/api/grupocliente`)
-      .then(response => {
-        setSelectedPerson(response.data)
+        setClientes(response.data)
+        axios.get('https://localhost:44328/api/clientes').then(response => {
+          setNameCliente(response.data)
+        })
       })
       .catch(() => {
         console.log('DEU ERRADO')
       })
-    axios.get('https://localhost:44328/api/clientes').then(response => {
-      setNameCliente(response.data)
-    })
-  }, [])
-
-  // const addCliente = (data: any) => {
-  //   const cdOnly = data.autocomplete.map(({ CD_PESSOA }) => ({
-  //     ID_Cliente: CD_PESSOA,
-  //     ID_Grupo: id.id.ID,
-  //     Status: true,
-  //     DT_Criacao: '2022-06-06T00:00:00'
-  //   }))
-  //   cdOnly.map((dados: any) => {
-  //     axios
-  //       .post('https://localhost:44328/api/GrupoCliente', dados)
-  //       .then(response => {
-  //         console.log(response)
-  //         refreshPage()
-  //       })
-  //       .catch(error => {
-  //         console.log(error, data)
-  //       })
-  //   })
-  // }
-
-  const editForm = (info: any) => {
-    axios
-      .put(`https://localhost:44328/api/grupo/${id.id.ID}`, info)
-      .then(() => {
-        console.log('Deu tudo certo', info)
-        refreshPage()
-      })
-      .catch(() => {
-        console.log('DEU ERRADO', info)
-      })
   }
+
   const deleteForm = (
+    id_grupo: any,
     id: any,
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault()
-
+    console.log(id)
     if (!window.confirm('Deseja realmente excluir este post?')) return
 
     try {
-      axios.delete(`https://localhost:44328/api/grupocliente/${id}`)
-      alert('Cliente excluído com sucesso')
-      refreshPage()
+      axios.delete(`https://localhost:44328/api/grupocliente/${id_grupo}/${id}`)
+      alert('Post excluído com sucesso')
+      fetchClientes()
     } catch (error) {
       console.log(error)
-      alert('Não foi excluir o cliente.')
+      alert('Não foi excluir o post.')
     }
+  }
+
+  const editForm = (data: any) => {
+    axios
+      .put(`https://localhost:44328/api/grupo/${id.id.ID}`, data)
+      .then(() => {
+        console.log('Deu tudo certo', data)
+        refreshPage()
+      })
+      .catch(() => {
+        console.log('DEU ERRADO', data, id)
+      })
   }
 
   return (
@@ -164,6 +128,7 @@ export const EditGroup = (id: any) => {
           Salvar
         </button>
       </form>
+      <TableClient id={id.id} />
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-10">
           <tr>
@@ -171,13 +136,7 @@ export const EditGroup = (id: any) => {
               scope="col"
               className="px-8 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
             >
-              Grupo
-            </th>
-            <th
-              scope="col"
-              className="px-8 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-            >
-              ID
+              Clientes
             </th>
 
             <th
@@ -188,26 +147,17 @@ export const EditGroup = (id: any) => {
             </th>
             <th
               scope="col"
-              className="px-10 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              className="px-13 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
             >
               Ação
             </th>
           </tr>
         </thead>
-        {clientes.map(clientes => {
+        {Clientes.map(clientes => {
           return (
             <React.Fragment key={clientes.ID}>
               <tbody className="bg-white divide-y divide-gray-200">
                 <tr>
-                  <td className="px-2 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900">
-                          {clientes.ID_Grupo}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
                   <td className="px-2 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="ml-4">
@@ -239,10 +189,12 @@ export const EditGroup = (id: any) => {
                       {clientes.Status === true ? 'Ativo' : 'Inativo'}
                     </div>
                   </td>
-                  <td className="px-9 py-4 whitespace-nowrap">
+                  <td className="px-2 py-4 whitespace-nowrap">
                     <button
                       className="text-gray-400 hover:text-gray-100  ml-2"
-                      onClick={e => deleteForm(clientes.ID_Cliente, e)}
+                      onClick={e =>
+                        deleteForm(clientes.ID_Grupo, clientes.ID_Cliente, e)
+                      }
                     >
                       <span className="sr-only">Close panel</span>
                       <TrashIcon className="h-6 w-6" aria-hidden="true" />
