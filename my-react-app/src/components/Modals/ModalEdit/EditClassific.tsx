@@ -8,7 +8,6 @@ function refreshPage() {
 export const ModalEdit = (id: any) => {
   const { control, register, handleSubmit } = useForm()
 
-  console.log('olhaqui:', id.id)
   const editForm = (data: any) => {
     axios
       .put(`https://localhost:44328/api/classific/${id.id.ID}`, data)
