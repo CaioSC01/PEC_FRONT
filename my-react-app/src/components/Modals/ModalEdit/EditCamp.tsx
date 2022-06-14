@@ -1,27 +1,27 @@
-import React from 'react'
-import axios from 'axios'
-import { useForm, Controller } from 'react-hook-form'
+import React from "react";
+import axios from "axios";
+import { useForm, Controller } from "react-hook-form";
 // import './Style/modalClient.css'
 
 function refreshPage() {
-  window.location.reload()
+  window.location.reload();
 }
 
 export const EditCamp = (id: any) => {
-  const { control, register, handleSubmit } = useForm()
+  const { control, register, handleSubmit } = useForm();
 
-  console.log('olhaqui:', id.id)
+  console.log("olhaqui:", id.id);
   const editForm = (data: any) => {
     axios
       .put(`https://localhost:44328/api/campanha/${id.id.ID}`, data)
       .then(() => {
-        console.log('Deu tudo certo', data)
-        refreshPage()
+        console.log("Deu tudo certo", data);
+        refreshPage();
       })
       .catch(() => {
-        console.log('DEU ERRADO', data, id)
-      })
-  }
+        console.log("DEU ERRADO", data, id);
+      });
+  };
 
   return (
     <>
@@ -37,17 +37,17 @@ export const EditCamp = (id: any) => {
             type="text"
             id="name_cp"
             className="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm"
-            {...register('Nome')}
+            {...register("Nome")}
             placeholder={id.id.Nome}
           />
         </div>
-        
+
         <Controller
           render={({ field }) => (
-            <select {...field} className="active_content">
-              <option>Fl_Ativo</option>
-              <option value={'true'}>Ativo</option>
-              <option value={'false'}>Inativo</option>
+            <select {...field} className="active_content ">
+              <option>Status</option>
+              <option value={"true"}>Ativo</option>
+              <option value={"false"}>Inativo</option>
             </select>
           )}
           control={control}
@@ -61,13 +61,11 @@ export const EditCamp = (id: any) => {
             Data de Criação
           </label>
           <input
-            type={'datetime-local'}
+            type={"datetime-local"}
             id="date"
             className="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm"
-            {...register('DT_Criacao')}
-           
+            {...register("DT_Criacao")}
           />
-          {id.id.DT_Criacao}
         </div>
 
         <div className="relative border border-gray-300 rounded-md px-3 py-2 shadow-sm focus-within:ring-1 focus-within:ring-indigo-600 focus-within:border-indigo-600 modal_content">
@@ -78,10 +76,10 @@ export const EditCamp = (id: any) => {
             Data de alteração
           </label>
           <input
-            type={'datetime-local'}
+            type={"datetime-local"}
             id="date"
             className="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm"
-            {...register('DT_Alteracao')}
+            {...register("DT_Alteracao")}
           />
         </div>
 
@@ -93,5 +91,5 @@ export const EditCamp = (id: any) => {
         </button>
       </form>
     </>
-  )
-}
+  );
+};

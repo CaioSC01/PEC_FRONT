@@ -1,49 +1,50 @@
-import React, { useEffect, useState } from 'react'
-import { EyeIcon, PencilIcon, TrashIcon } from '@heroicons/react/solid'
-import axios from 'axios'
-import { Modal } from 'react-bootstrap'
-import { EditCamp } from '../Modals/ModalEdit/EditCamp'
-import { ModalDeleteCamp } from '../Modals/ModalDelete/DeleteCamp'
+import React, { useEffect, useState } from "react";
+import { EyeIcon, PencilIcon, TrashIcon } from "@heroicons/react/solid";
+import axios from "axios";
+import { Modal } from "react-bootstrap";
+import { EditCamp } from "../Modals/ModalEdit/EditCamp";
+import { ModalDeleteCamp } from "../Modals/ModalDelete/DeleteCamp";
 // import { ModalEditCamp } from './modals/ModalEdit/EditCamp'
 
 function refreshPage() {
-  window.location.reload()
+  window.location.reload();
 }
 
 export const CardsCampanha = () => {
-  const [showE, setShowE] = useState(false)
-  const handleShowE = () => setShowE(true)
-  const handleCloseE = () => setShowE(false)
-  const [showD, setShowD] = useState(false)
-  const handleShowD = () => setShowD(true)
-  const handleCloseD = () => setShowD(false)
-  const [camp, setCamp] = useState<any[]>([])
-  const [dados, setDados] = useState<any[]>([])
+  const [showE, setShowE] = useState(false);
+  const handleShowE = () => setShowE(true);
+  const handleCloseE = () => setShowE(false);
+  const [showD, setShowD] = useState(false);
+  const handleShowD = () => setShowD(true);
+  const handleCloseD = () => setShowD(false);
+  const [camp, setCamp] = useState<any[]>([]);
+  const [dados, setDados] = useState<any[]>([]);
 
   useEffect(() => {
     axios
-      .get('https://localhost:44328/api/campanha')
-      .then(response => {
-        setCamp(response.data)
+      .get("https://localhost:44328/api/campanha")
+      .then((response) => {
+        setCamp(response.data);
       })
       .catch(() => {
-        console.log('DEU ERRADO')
-      })
-  }, [])
+        console.log("DEU ERRADO");
+      });
+  }, []);
 
   const EditForm = (
     id: any,
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    e.preventDefault()
-    axios.get(`https://localhost:44328/api/campanha/${id}`).then(response => {
-      setDados(response.data)
-    })
-  }
+    e.preventDefault();
+    axios.get(`https://localhost:44328/api/campanha/${id}`).then((response) => {
+      setDados(response.data);
+    });
+  };
+  console.log(dados);
 
   return (
     <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {camp.map(camp => (
+      {camp.map((camp) => (
         <li
           key={camp.ID}
           className="col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200"
@@ -57,11 +58,11 @@ export const CardsCampanha = () => {
                 <span
                   className={
                     camp.Fl_Ativo === true
-                      ? 'inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-green-100 text-green-800'
-                      : 'inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-red-100 text-red-800'
+                      ? "inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-green-100 text-green-800"
+                      : "inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-red-100 text-red-800"
                   }
                 >
-                  {camp.Fl_Ativo === true ? 'Ativo' : 'Inativo'}
+                  {camp.Fl_Ativo === true ? "Ativo" : "Inativo"}
                 </span>
               </div>
             </div>
@@ -70,7 +71,7 @@ export const CardsCampanha = () => {
             <div className="-mt-px flex divide-x divide-gray-200">
               <div className="w-0 flex-1 flex">
                 <button
-                  onClick={e => EditForm(camp.ID, e)}
+                  onClick={(e) => EditForm(camp.ID, e)}
                   className="text-gray-400 hover:text-gray-100 px-10 mx-2"
                 >
                   <span className="sr-only">Close panel</span>
@@ -90,79 +91,77 @@ export const CardsCampanha = () => {
               <div className="-ml-px w-0 flex-1 flex">
                 <button
                   className="text-gray-400 hover:text-gray-100 px-10 ml-2"
-                  onClick={e => EditForm(camp.ID, e)}
+                  onClick={(e) => EditForm(camp.ID, e)}
                 >
                   <span className="sr-only">Close panel</span>
-                  <TrashIcon 
-                  className="h-6 w-6"
-                   aria-hidden="true"
-                   onClick={handleShowD}
-                   />
+                  <TrashIcon
+                    className="h-6 w-6"
+                    aria-hidden="true"
+                    onClick={handleShowD}
+                  />
                 </button>
               </div>
             </div>
           </div>
         </li>
       ))}
-      {dados.map(dados => {
+      {dados.map((dados) => {
         return (
           <>
-          <Modal
-            show={showE}
-            onHide={handleCloseE}
-            backdrop="static"
-            keyboard={false}
-          >
-            <Modal.Header>
-              <Modal.Title>Editar Campanha</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <EditCamp id={dados} />
-            </Modal.Body>
-            <Modal.Footer>
-              <button
-                type="button"
-                className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                onClick={handleCloseE}
-              >
-                Cancelar
-              </button>
-            </Modal.Footer>
-          </Modal>
-          
-          <Modal
-          show={showD}
-          onHide={handleCloseD}
-          backdrop="static"
-          keyboard={false}
-        >
-          <Modal.Header>
-            <Modal.Title>
-              Deletar Classificação <b></b>
-            </Modal.Title>
-          </Modal.Header>
-
-          <Modal.Body>
-            <ModalDeleteCamp id={dados} />
-          </Modal.Body>
-          <Modal.Footer>
-            <button
-              type="button"
-              className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-[#9a8e74] hover:bg-[#b5aa92]focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              onClick={handleCloseD}
+            <Modal
+              show={showE}
+              onHide={handleCloseE}
+              backdrop="static"
+              keyboard={false}
             >
-              Cancelar
-            </button>
-          </Modal.Footer>
-        </Modal>
-        <Modal>
-          <Modal.Title>
-            Vizualisar 
-          </Modal.Title>
-        </Modal>
+              <Modal.Header>
+                <Modal.Title>Editar Campanha</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <EditCamp id={dados} />
+              </Modal.Body>
+              <Modal.Footer>
+                <button
+                  type="button"
+                  className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  onClick={handleCloseE}
+                >
+                  Cancelar
+                </button>
+              </Modal.Footer>
+            </Modal>
+
+            <Modal
+              show={showD}
+              onHide={handleCloseD}
+              backdrop="static"
+              keyboard={false}
+            >
+              <Modal.Header>
+                <Modal.Title>
+                  Deletar <b>{dados.Nome}</b>
+                </Modal.Title>
+              </Modal.Header>
+
+              <Modal.Body>
+                <ModalDeleteCamp id={dados} />
+              </Modal.Body>
+              <Modal.Footer>
+                <button
+                  type="button"
+                  className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-[#9a8e74] hover:bg-[#b5aa92]focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  onClick={handleCloseD}
+                >
+                  Cancelar
+                </button>
+              </Modal.Footer>
+            </Modal>
+            <Modal>
+              <Modal.Title>Vizualisar</Modal.Title>
+            </Modal>
           </>
-        )
+        );
       })}
     </ul>
-  )
-}
+  );
+};
