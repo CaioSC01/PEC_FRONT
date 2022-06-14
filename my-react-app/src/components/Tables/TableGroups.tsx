@@ -5,6 +5,8 @@ import { Modal } from 'react-bootstrap'
 import { EditGroup } from '../Modals/ModalEdit/EditGroup'
 import { ModalDeleteGroup } from '../Modals/ModalDelete/DeleteGroup'
 import { TableClient } from './TableCliente'
+import UnopDropdown from 'unop-react-dropdown'
+import './tableclient.css'
 
 // import { ModalEditGroup } from './modals/ModalEdit/EditGroup'
 
@@ -24,13 +26,16 @@ export const TableGroups = () => {
   const handleCloseP = () => setShowP(false)
   const [groups, setGroups] = useState<any[]>([])
   const [dados, setDados] = useState<any[]>([])
-  const [id, setId] = useState<any[]>([])
+  const [clientes, setClientes] = useState<any[]>([])
 
   useEffect(() => {
     axios
       .get('https://localhost:44328/api/grupo')
       .then(response => {
         setGroups(response.data)
+        axios.get(`https://localhost:44328/api/GrupoCliente`).then(response => {
+          setClientes(response.data)
+        })
       })
       .catch(() => {
         console.log('DEU ERRADO')
@@ -80,12 +85,6 @@ export const TableGroups = () => {
                         scope="col"
                         className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider content_action"
                       >
-                        Add Clientes
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider content_action"
-                      >
                         Ações
                       </th>
                     </tr>
@@ -120,7 +119,8 @@ export const TableGroups = () => {
                                 {groups.Status === true ? 'Ativo' : 'Inativo'}
                               </div>
                             </td>
-                            <td className="px-9 py-4 whitespace-nowrap">
+
+                            <td className="content_td">
                               <button
                                 onClick={e => GetID(groups.ID, e)}
                                 className="text-gray-400 hover:text-gray-100  mx-2"
@@ -132,9 +132,6 @@ export const TableGroups = () => {
                                   onClick={handleShowP}
                                 />
                               </button>
-                            </td>
-
-                            <td className="content_td">
                               <button
                                 onClick={e => GetID(groups.ID, e)}
                                 className="text-gray-400 hover:text-gray-100  mx-2"
@@ -175,7 +172,7 @@ export const TableGroups = () => {
                         keyboard={false}
                       >
                         <Modal.Header>
-                          <Modal.Title>Editar Grupo</Modal.Title>
+                          <Modal.Title>Adicionar Clientes</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                           <TableClient id={dados} />

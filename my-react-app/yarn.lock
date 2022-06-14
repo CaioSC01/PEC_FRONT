@@ -1528,6 +1528,11 @@ uncontrollable@^7.2.1:
     invariant "^2.2.4"
     react-lifecycles-compat "^3.0.4"
 
+unop-react-dropdown@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/unop-react-dropdown/-/unop-react-dropdown-0.2.3.tgz#b1e640438f12843b8cc812c38c79a207c9a0569c"
+  integrity sha512-pb4WYD9R/Axhp95CrGvkWNlZ0u2DMZ2YXlcRONetAIWJqSSXpnP7iQxMBl8RMIdhsYpC9VbvWrR26NTu/cUNQw==
+
 util-deprecate@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
