@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+
 import { TrashIcon, PencilIcon, PlusIcon } from "@heroicons/react/outline";
 import { Modal } from "react-bootstrap";
 import { EditGroup } from "../Modals/ModalEdit/EditGroup";
@@ -59,6 +60,7 @@ export const TableGroups = () => {
       setDados(response.data);
     });
   };
+
   return (
     <>
       <div className="w-full">
@@ -90,13 +92,16 @@ export const TableGroups = () => {
 
                       <th
                         scope="col"
+
                         className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
+
                       >
                         Ações
                         <span className="sr-only">Edit</span>
                       </th>
                     </tr>
                   </thead>
+
                   <tbody className="divide-y divide-gray-200 bg-white">
                     {groups.map((group) => (
                       <tr key={group.email}>
@@ -183,6 +188,7 @@ export const TableGroups = () => {
                       </tr>
                     ))}
                   </tbody>
+
                 </table>
                 {dados.map((dados) => {
                   return (

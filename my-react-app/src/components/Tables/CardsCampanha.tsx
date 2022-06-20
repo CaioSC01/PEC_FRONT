@@ -1,9 +1,11 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
+
 import { EyeIcon, PencilIcon, TrashIcon } from "@heroicons/react/solid";
 import axios from "axios";
 import { Modal } from "react-bootstrap";
 import { EditCamp } from "../Modals/ModalEdit/EditCamp";
 import { ModalDeleteCamp } from "../Modals/ModalDelete/DeleteCamp";
+
 import { Dialog, Menu, Transition } from "@headlessui/react";
 import ViewCamp from "../Views/viewCamp";
 import { XIcon } from "@heroicons/react/outline";
@@ -74,7 +76,7 @@ export const CardsCampanha = () => {
           initialFocus={completeButtonRef}
         >
           <div className="fixed inset-0" />
-    
+
           <ViewCamp id={dados} />
         </Dialog>
       </Transition.Root>
@@ -145,6 +147,7 @@ export const CardsCampanha = () => {
           </li>
         ))}
       </ul>
+
       {dados.map((dados) => {
         return (
           <>
