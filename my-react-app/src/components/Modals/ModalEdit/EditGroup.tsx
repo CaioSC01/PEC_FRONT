@@ -10,8 +10,6 @@ function refreshPage() {
 }
 export const EditGroup = (id: any) => {
   const { control, register, handleSubmit } = useForm()
-  const [IDClientes, setSelectedIDClientes] = useState<any[]>([])
-  const [selectedClientes, setSelectedClientes] = useState<any[]>([])
   const [Clientes, setClientes] = useState<any[]>([])
   const [NameCliente, setNameCliente] = useState<any[]>([])
 

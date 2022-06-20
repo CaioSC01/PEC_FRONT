@@ -42,7 +42,9 @@ export const Navbar = () => {
                 <div className="job">Função</div>
               </div>
             </div>
-            <i className="bx bx-log-out" id="log_out"></i>
+            
+              <a href="http://polireal.azurewebsites.net/Login.aspx"><i className="bx bx-log-out" id="log_out"></i></a>
+            
           </li>
         </ul>
       </nav>

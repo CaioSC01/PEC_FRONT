@@ -1,200 +1,190 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import { TrashIcon, PencilIcon, PlusIcon } from '@heroicons/react/outline'
-import { Modal } from 'react-bootstrap'
-import { EditGroup } from '../Modals/ModalEdit/EditGroup'
-import { ModalDeleteGroup } from '../Modals/ModalDelete/DeleteGroup'
-import { TableClient } from './TableCliente'
-import './tableclient.css'
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { TrashIcon, PencilIcon, PlusIcon } from "@heroicons/react/outline";
+import { Modal } from "react-bootstrap";
+import { EditGroup } from "../Modals/ModalEdit/EditGroup";
+import { ModalDeleteGroup } from "../Modals/ModalDelete/DeleteGroup";
+import { TableClient } from "./TableCliente";
+
+import { tooltip } from "@deepdub/react-ok-tooltip";
 
 // import { ModalEditGroup } from './modals/ModalEdit/EditGroup'
 
 function refreshPage() {
-  window.location.reload()
+  window.location.reload();
 }
 
 export const TableGroups = () => {
-  const [showE, setShowE] = useState(false)
-  const handleShowE = () => setShowE(true)
-  const handleCloseE = () => setShowE(false)
-  const [showD, setShowD] = useState(false)
-  const handleShowD = () => setShowD(true)
-  const handleCloseD = () => setShowD(false)
-  const [showP, setShowP] = useState(false)
-  const handleShowP = () => setShowP(true)
-  const handleCloseP = () => setShowP(false)
-  const [groups, setGroups] = useState<any[]>([])
-  const [dados, setDados] = useState<any[]>([])
-  const [Clientes, setClientes] = useState<any[]>([])
-  const [NameClientes, setNameClientes] = useState<any[]>([])
+  const [showE, setShowE] = useState(false);
+  const handleShowE = () => setShowE(true);
+  const handleCloseE = () => setShowE(false);
+  const [showD, setShowD] = useState(false);
+  const handleShowD = () => setShowD(true);
+  const handleCloseD = () => setShowD(false);
+  const [showP, setShowP] = useState(false);
+  const handleShowP = () => setShowP(true);
+  const handleCloseP = () => setShowP(false);
+  const [groups, setGroups] = useState<any[]>([]);
+  const [dados, setDados] = useState<any[]>([]);
+  const [Clientes, setClientes] = useState<any[]>([]);
+  const [NameClientes, setNameClientes] = useState<any[]>([]);
 
   useEffect(() => {
     axios
-      .get('https://localhost:44328/api/grupo')
-      .then(response => {
-        setGroups(response.data)
-        axios.get(`https://localhost:44328/api/GrupoCliente`).then(response => {
-          setClientes(response.data)
-          axios.get(`https://localhost:44328/api/clientes`).then(response => {
-            setNameClientes(response.data)
-          })
-        })
+      .get("https://localhost:44328/api/grupo")
+      .then((response) => {
+        setGroups(response.data);
+        axios
+          .get(`https://localhost:44328/api/GrupoCliente`)
+          .then((response) => {
+            setClientes(response.data);
+            axios
+              .get(`https://localhost:44328/api/clientes`)
+              .then((response) => {
+                setNameClientes(response.data);
+              });
+          });
       })
       .catch(() => {
-        console.log('DEU ERRADO')
-      })
-  }, [])
+        console.log("DEU ERRADO");
+      });
+  }, []);
 
   const GetID = (
     id: any,
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    e.preventDefault()
-    axios.get(`https://localhost:44328/api/grupo/${id}`).then(response => {
-      setDados(response.data)
-    })
-  }
-
+    e.preventDefault();
+    axios.get(`https://localhost:44328/api/grupo/${id}`).then((response) => {
+      setDados(response.data);
+    });
+  };
   return (
     <>
       <div className="w-full">
         <div className="flex flex-col">
-          <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div className="-my-2 overflow-x-auto sm:-mx-2 lg:-mx-7">
             <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-10">
               <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-10">
+                <table className="min-w-full divide-y divide-gray-300">
+                  <thead className="bg-gray-50">
                     <tr>
                       <th
                         scope="col"
-                        className="px-8 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="py-1 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                       >
                         ID
                       </th>
                       <th
                         scope="col"
-                        className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
                         Grupo
                       </th>
                       <th
                         scope="col"
-                        className="px-10 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
                         Status
                       </th>
 
                       <th
                         scope="col"
-                        className="px-1 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider content_action"
-                      >
-                        Clientes
-                      </th>
-                      <th
-                        scope="col"
-                        className="px- py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider content_action"
+                        className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
                       >
                         Ações
+                        <span className="sr-only">Edit</span>
                       </th>
                     </tr>
                   </thead>
-                  {groups.map(groups => {
-                    return (
-                      <React.Fragment key={groups.ID}>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                          <tr>
-                            <td className="px-2 py-4 whitespace-nowrap">
-                              <div className="flex items-center">
-                                <div className="ml-4">
-                                  <div className="text-sm font-medium text-gray-900">
-                                    {groups.ID}
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="font-bold text-sm text-gray-900">
-                                {groups.DS_Grupo}
-                              </div>
-                            </td>
-                            <td className="px-9 py-4 whitespace-nowrap">
-                              <div
-                                className={
-                                  groups.Status === true
-                                    ? 'inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-green-100 text-green-800'
-                                    : 'inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-red-100 text-red-800'
-                                }
-                              >
-                                {groups.Status === true ? 'Ativo' : 'Inativo'}
-                              </div>
-                            </td>
-                            <td className="px-1 py-3 whitespace-nowrap">
-                              <div className="sm:col-span-2">
-                                {Clientes.map(clientes => {
-                                  return (
-                                    <>
-                                      {NameClientes.map(name => {
-                                        return (
-                                          <div className="text-sm font-medium text-gray-900 ">
-                                            {clientes.ID_Cliente ==
-                                              name.CD_PESSOA &&
-                                            clientes.ID_Grupo == groups.ID ? (
-                                              <p> {name.NM_GUERRA},</p>
-                                            ) : (
-                                              ''
-                                            )}
-                                          </div>
-                                        )
-                                      })}
-                                    </>
-                                  )
-                                })}
-                              </div>
-                            </td>
+                  <tbody className="divide-y divide-gray-200 bg-white">
+                    {groups.map((group) => (
+                      <tr key={group.email}>
+                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+                          <div className="flex items-center">
+                            <div className="font-medium text-gray-900">
+                              {group.ID}
+                            </div>
+                          </div>
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          <div className="text-gray-900">{group.DS_Grupo}</div>
 
-                            <td className="content_td">
-                              <button
-                                onClick={e => GetID(groups.ID, e)}
-                                className="text-gray-400 hover:text-gray-100  mx-2"
-                              >
-                                <span className="sr-only">Close panel</span>
-                                <PlusIcon
-                                  className="h-6 w-6"
-                                  aria-hidden="true"
-                                  onClick={handleShowP}
-                                />
-                              </button>
-                              <button
-                                onClick={e => GetID(groups.ID, e)}
-                                className="text-gray-400 hover:text-gray-100  mx-2"
-                              >
-                                <span className="sr-only">Close panel</span>
-                                <PencilIcon
-                                  className="h-6 w-6"
-                                  aria-hidden="true"
-                                  onClick={handleShowE}
-                                />
-                              </button>
+                          <div className="text-gray-500">
+                            Seara, josefa ..
+                            {/* {Clientes.map((clientes) => {
+                              return (
+                                <>
+                                  {NameClientes.map((name) => {
+                                    return (
+                                      <div className="text-gray-500">
+                                        {clientes.ID_Cliente ==
+                                          name.CD_PESSOA &&
+                                        clientes.ID_Grupo == group.ID ? (
+                                          <p> {name.NM_GUERRA}</p>
+                                        ) : (
+                                          ""
+                                        )}
+                                      </div>
+                                    );
+                                  })}
+                                </>
+                              );
+                            })} */}
+                          </div>
+                        </td>
+                        <td className="whitespace-nowrap px-1 py-4 text-sm text-gray-500">
+                          <div
+                            className={
+                              group.Status === true
+                                ? "inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-green-100 text-green-800"
+                                : "inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-red-100 text-red-800"
+                            }
+                          >
+                            {group.Status === true ? "Ativo" : "Inativo"}
+                          </div>
+                        </td>
+                        <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                          <button
+                            onClick={(e) => GetID(group.ID, e)}
+                            className="text-gray-400 hover:text-gray-100  mx-2"
+                          >
+                            <span className="sr-only">Close panel</span>
+                            <PlusIcon
+                              className="h-6 w-6"
+                              aria-hidden="true"
+                              onClick={handleShowP}
+                            />
+                          </button>
+                          <button
+                            onClick={(e) => GetID(group.ID, e)}
+                            className="text-gray-400 hover:text-gray-100  mx-2"
+                          >
+                            <span className="sr-only">Close panel</span>
+                            <PencilIcon
+                              className="h-6 w-6"
+                              aria-hidden="true"
+                              onClick={handleShowE}
+                            />
+                          </button>
 
-                              <button
-                                className="text-gray-400 hover:text-gray-100  ml-2"
-                                onClick={e => GetID(groups.ID, e)}
-                              >
-                                <span className="sr-only">Close panel</span>
-                                <TrashIcon
-                                  className="h-6 w-6"
-                                  aria-hidden="true"
-                                  onClick={handleShowD}
-                                />
-                              </button>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </React.Fragment>
-                    )
-                  })}
+                          <button
+                            className="text-gray-400 hover:text-gray-100  ml-2"
+                            onClick={(e) => GetID(group.ID, e)}
+                          >
+                            <span className="sr-only">Close panel</span>
+                            <TrashIcon
+                              className="h-6 w-6"
+                              aria-hidden="true"
+                              onClick={handleShowD}
+                            />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
                 </table>
-                {dados.map(dados => {
+                {dados.map((dados) => {
                   return (
                     <>
                       <Modal
@@ -204,7 +194,7 @@ export const TableGroups = () => {
                         keyboard={false}
                       >
                         <Modal.Header>
-                          <Modal.Title>Editar Grupo</Modal.Title>
+                          <Modal.Title>Adicionar Clientes</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                           <TableClient id={dados} />
@@ -250,7 +240,7 @@ export const TableGroups = () => {
                       >
                         <Modal.Header>
                           <Modal.Title>
-                            Deletar Classificação <b></b>
+                            Deletar Grupo <b></b>
                           </Modal.Title>
                         </Modal.Header>
 
@@ -268,7 +258,7 @@ export const TableGroups = () => {
                         </Modal.Footer>
                       </Modal>
                     </>
-                  )
+                  );
                 })}
               </div>
             </div>
@@ -276,5 +266,5 @@ export const TableGroups = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
