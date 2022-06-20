@@ -4,29 +4,14 @@ import { PlusSmIcon, TrashIcon, XIcon } from "@heroicons/react/outline";
 import axios from "axios";
 import React from "react";
 import { BoxCamp } from "../ComboBox/BoxCamp";
-
-function refreshPage() {
-  window.location.reload();
-}
-
-const people = [
-  {
-    name: "Calvin Hawkins",
-    email: "calvin.hawkins@example.com",
-  },
-  {
-    name: "Kristen Ramos",
-    email: "kristen.ramos@example.com",
-  },
-  {
-    name: "Ted Fox",
-    email: "ted.fox@example.com",
-  },
-];
+import { BoxCampProdut } from "../ComboBox/BoxCampProdut";
+import './view.css'
 
 export default function ViewCamp(id: any) {
   const [Clientes, setClientes] = useState<any[]>([]);
   const [NameCliente, setNameCliente] = useState<any[]>([]);
+  const [NameProdutos, setNameProdutos] = useState<any[]>([]);
+  const [Produtos, setProdutos] = useState<any[]>([]);
 
   useEffect(() => {
     axios
@@ -35,6 +20,17 @@ export default function ViewCamp(id: any) {
         setClientes(response.data);
         axios.get("https://localhost:44328/api/clientes").then((response) => {
           setNameCliente(response.data);
+        });
+      })
+      .catch(() => {
+        console.log("DEU ERRADO");
+      });
+    axios
+      .get(`https://localhost:44328/api/Campanhaproduto/${id.id[0].ID}`)
+      .then((response) => {
+        setProdutos(response.data);
+        axios.get("https://localhost:44328/api/maters").then((response) => {
+          setNameProdutos(response.data);
         });
       })
       .catch(() => {
@@ -54,6 +50,17 @@ export default function ViewCamp(id: any) {
       .catch(() => {
         console.log("DEU ERRADO");
       });
+    axios
+      .get(`https://localhost:44328/api/Campanhaproduto/${id.id[0].ID}`)
+      .then((response) => {
+        setProdutos(response.data);
+        axios.get("https://localhost:44328/api/maters").then((response) => {
+          setNameProdutos(response.data);
+        });
+      })
+      .catch(() => {
+        console.log("DEU ERRADO");
+      });
   };
 
   const deleteForm = (
@@ -62,13 +69,26 @@ export default function ViewCamp(id: any) {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
- 
+
     axios.delete(
       `https://localhost:44328/api/campanhacliente/${ID_investCampanha}/${ID_Cliente}`
     );
     alert("Post excluído com sucesso");
     fetchClientes();
+  };
 
+  const deleteProduto = (
+    ID_investCampanha: any,
+    ID_Produto: any,
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+
+    axios.delete(
+      `https://localhost:44328/api/campanhaproduto/${ID_investCampanha}/${ID_Produto}`
+    );
+    alert("Post excluído com sucesso");
+    fetchClientes();
   };
 
   return (
@@ -91,7 +111,7 @@ export default function ViewCamp(id: any) {
                     <div className="flex items-start justify-between">
                       <h1
                         id="slide-over-heading"
-                        className="text-lg font-medium text-gray-900"
+                        className="text-lg font-medium text-black"
                       >
                         Campanha
                       </h1>
@@ -110,13 +130,13 @@ export default function ViewCamp(id: any) {
                   <div>
                     <div className="pb-1 sm:pb-6">
                       <div>
-                        <div className="relative h-40 sm:h-56">
+                        {/* <div className="relative h-40 sm:h-56">
                           <img
-                            className="absolute h-full w-full object-cover"
-                            src="https://picsum.photos/500/300?random=1"
+                            className="absolute h-full w-full object-cover "
+                            src="https://www.vaxxinova.com.br/wp-content/themes/vaxxinova/images/logo-vaxxinova.svg"
                             alt=""
                           />
-                        </div>
+                        </div> */}
                         <div
                           className="mt-6 px-4 sm:mt-8 sm:flex sm:items-end sm:px-6"
                           key={id.id[0].ID}
@@ -125,7 +145,7 @@ export default function ViewCamp(id: any) {
                             <div>
                               <div className="flex items-center">
                                 <h3 className="text-xl font-bold text-gray-900 sm:text-2xl">
-                                  {id.id[0].ID}
+                                  
 
                                   {id.id[0].Nome}
                                 </h3>
@@ -159,8 +179,8 @@ export default function ViewCamp(id: any) {
                           </p>
                         </div>
                         <BoxCamp id={id.id} />
-                        <table className="min-w-full divide-y divide-gray-200">
-                          <thead className="bg-gray-10">
+                        <table className="min-w-full divide-y divide-gray-300 content">
+                          <thead className="bg-gray-10 ">
                             <tr>
                               <th
                                 scope="col"
@@ -234,8 +254,8 @@ export default function ViewCamp(id: any) {
                             Produtos
                           </p>
                         </div>
-                        <BoxCamp id={id.id} />
-                        <table className="min-w-full divide-y divide-gray-200">
+                        <BoxCampProdut id={id.id} />
+                        <table className="min-w-full divide-y divide-gray-200 content">
                           <thead className="bg-gray-10">
                             <tr>
                               <th
@@ -252,21 +272,24 @@ export default function ViewCamp(id: any) {
                               </th>
                             </tr>
                           </thead>
-                          {people.map((clientes) => {
+                          {Produtos.map((produto) => {
                             return (
-                              <React.Fragment key={clientes.name}>
+                              <React.Fragment key={produto.ID}>
                                 <tbody className="bg-white divide-y divide-gray-200">
                                   <tr>
                                     <td className="px-2 py-4 whitespace-nowrap">
                                       <div className="flex items-center">
                                         <div className="ml-4">
-                                          {people.map((name) => {
+                                          {NameProdutos.map((name) => {
                                             return (
                                               <>
                                                 <div className="text-sm font-medium text-gray-900">
-                                                  {clientes.name ==
-                                                  name.name ? (
-                                                    <div>{name.name}</div>
+                                                  {produto.ID_Produto ==
+                                                  name.CD_ITEM ? (
+                                                    <>
+                                                      <div>{name.DS_ITEM}</div>
+                                                      <div>{name.UN}</div>
+                                                    </>
                                                   ) : (
                                                     ""
                                                   )}
@@ -282,9 +305,9 @@ export default function ViewCamp(id: any) {
                                       <button
                                         className="text-gray-400 hover:text-gray-100  ml-2"
                                         onClick={(e) =>
-                                          deleteForm(
-                                            clientes.name,
-                                            clientes.name,
+                                          deleteProduto(
+                                            id.id[0].ID,
+                                            produto.ID_Produto,
                                             e
                                           )
                                         }
