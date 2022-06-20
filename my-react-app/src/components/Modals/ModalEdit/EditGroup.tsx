@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Controller, useForm } from 'react-hook-form'
 // import './Style/modalGroup.css'
-import { TableClient } from '../../Tables/TableCliente'
+import { TableClient } from '../../ComboBox/BoxGrupo'
 import { TrashIcon } from '@heroicons/react/outline'
 
 function refreshPage() {

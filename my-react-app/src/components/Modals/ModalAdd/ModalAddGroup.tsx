@@ -2,7 +2,7 @@ import { ChangeEvent, useState } from 'react'
 import axios from 'axios'
 import { Controller, useForm } from 'react-hook-form'
 import './Style/modalGroup.css'
-import { TableClient } from '../../Tables/TableCliente'
+import { TableClient } from '../../ComboBox/BoxGrupo'
 
 function refreshPage() {
   window.location.reload()

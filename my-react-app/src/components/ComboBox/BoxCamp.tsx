@@ -1,56 +1,50 @@
 import React, { useState, useEffect } from "react";
 import { useForm, NestedValue } from "react-hook-form";
-import { TextField, FormControl, Select, MenuItem } from "@material-ui/core";
+import { TextField } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 import axios from "axios";
-import { TrashIcon, PencilIcon } from "@heroicons/react/outline";
-import { SelectorIcon } from "@heroicons/react/solid";
-import { Combobox } from "@headlessui/react";
-
 
 function refreshPage() {
   window.location.reload();
 }
 
-export const TableClient = (id: any) => {
+export const BoxCamp = (id: any) => {
   const [NameCliente, setNameCliente] = useState<any[]>([]);
   const { handleSubmit, setValue } = useForm<FormValues>({
     defaultValues: { autocomplete: [] },
   });
-  const [selectedPerson, setSelectedPerson] = useState<any[]>([]);
 
   useEffect(() => {
-    axios
-      .get(`https://localhost:44328/api/grupocliente`)
-      .then((response) => {
-        setSelectedPerson(response.data);
-      })
-      .catch(() => {
-        console.log("DEU ERRADO");
-      });
     axios.get("https://localhost:44328/api/clientes").then((response) => {
       setNameCliente(response.data);
     });
   }, []);
 
+  const fetchClientes = () => {
+    axios.get("https://localhost:44328/api/clientes").then((response) => {
+      setNameCliente(response.data);
+    });
+  };
+
   const addCliente = (data: any) => {
-    // console.log(id.id)
     const cdOnly = data.autocomplete.map(({ CD_PESSOA }) => ({
+      ID_InvestCampanha: id.id[0].ID,
       ID_Cliente: CD_PESSOA,
-      ID_Grupo: id.id.ID,
-      Status: true,
+      Fl_Ativo: true,
       DT_Criacao: "2022-06-06T00:00:00",
+      DT_Alteracao: "2022-06-06T00:00:00",
+      FL_Removido: false,
     }));
     cdOnly.map((dados: any) => {
       axios
-        .post("https://localhost:44328/api/GrupoCliente", dados)
+        .post("https://localhost:44328/api/campanhacliente", dados)
         .then((response) => {
           console.log(response);
         })
         .catch((error) => {
           console.log(error, data);
         });
-      refreshPage();
+      fetchClientes();
     });
   };
 
@@ -68,7 +62,7 @@ export const TableClient = (id: any) => {
       <form onSubmit={handleSubmit(addCliente)}>
         <section>
           <label>
-            Adicionar clientes ao grupo <b> {id.id.DS_Grupo}</b>
+            Adicionar clientes a Campanha <b> {id.id[0].Nome}</b>
           </label>
           <Autocomplete
             multiple

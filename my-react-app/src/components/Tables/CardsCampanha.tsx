@@ -30,6 +30,7 @@ export const CardsCampanha = () => {
   const handleCloseD = () => setShowD(false);
   const [camp, setCamp] = useState<any[]>([]);
   const [dados, setDados] = useState<any[]>([]);
+  const [view, setView] = useState<any[]>([]);
 
   const [open, setOpen] = useState(false);
   let completeButtonRef = useRef(null);
@@ -51,9 +52,9 @@ export const CardsCampanha = () => {
   ) => {
     e.preventDefault();
     axios.get(`https://localhost:44328/api/campanha/${id}`).then((response) => {
-      setDados(response.data);
+      setView(response.data);
+      setOpen(true);
     });
-    setOpen(true);
   };
 
   const EditForm = (
@@ -77,7 +78,7 @@ export const CardsCampanha = () => {
         >
           <div className="fixed inset-0" />
 
-          <ViewCamp id={dados} />
+          <ViewCamp id={view} />
         </Dialog>
       </Transition.Root>
 

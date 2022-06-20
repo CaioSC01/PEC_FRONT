@@ -5,7 +5,7 @@ import { TrashIcon, PencilIcon, PlusIcon } from "@heroicons/react/outline";
 import { Modal } from "react-bootstrap";
 import { EditGroup } from "../Modals/ModalEdit/EditGroup";
 import { ModalDeleteGroup } from "../Modals/ModalDelete/DeleteGroup";
-import { TableClient } from "./TableCliente";
+import { TableClient } from "../ComboBox/BoxGrupo";
 
 import { tooltip } from "@deepdub/react-ok-tooltip";
 

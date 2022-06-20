@@ -10,7 +10,6 @@ function refreshPage() {
 export const EditCamp = (id: any) => {
   const { control, register, handleSubmit } = useForm();
 
-  console.log("olhaqui:", id.id);
   const editForm = (data: any) => {
     axios
       .put(`https://localhost:44328/api/campanha/${id.id.ID}`, data)
