@@ -3,6 +3,7 @@ import axios from 'axios'
 import { Controller, useForm } from 'react-hook-form'
 import './Style/modalGroup.css'
 import { TableClient } from '../../ComboBox/BoxGrupo'
+import { BoxClassific } from '../../ComboBox/BoxClassific'
 
 function refreshPage() {
   window.location.reload()
@@ -75,6 +76,8 @@ export const ModalGroup = () => {
           Salvar
         </button>
       </form>
+		<BoxClassific/>
+
     </>
   )
 }

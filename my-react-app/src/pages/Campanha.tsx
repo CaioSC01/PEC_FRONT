@@ -22,7 +22,7 @@ export const Campanha = () => {
                 >
                   <div className="ml-2 flex items-center space-x-4 sm:ml-6 sm:space-x-6">
                     <h2 className="p-4 text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
-                      Campanha
+                      Campanha Promocional
                     </h2>
                     <button
                       type="button"
