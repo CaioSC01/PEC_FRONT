@@ -1,27 +1,51 @@
-import { ChangeEvent, useState } from 'react'
-import axios from 'axios'
-import { Controller, useForm } from 'react-hook-form'
-import './Style/modalGroup.css'
-import { TableClient } from '../../ComboBox/BoxGrupo'
-import { BoxClassific } from '../../ComboBox/BoxClassific'
+import { ChangeEvent, useEffect, useState } from "react";
+import axios from "axios";
+import { Controller, NestedValue, useForm } from "react-hook-form";
+import "./Style/modalGroup.css";
+import ReactSelect from "react-select";
+// import { TableClient } from "../../ComboBox/BoxGrupo";
+// import { BoxClassific } from "../../ComboBox/BoxClassific";
+import { Autocomplete } from "@material-ui/lab";
+import { TextField } from "@material-ui/core";
 
 function refreshPage() {
-  window.location.reload()
+  window.location.reload();
 }
 // onChange={handleStatusChange}
 export const ModalGroup = () => {
-  const { control, register, handleSubmit } = useForm()
+  const { control, register, handleSubmit } = useForm();
+  const [NameClassific, setNameClassific] = useState<any[]>([]);
+  const { setValue } = useForm<FormValues>({
+    defaultValues: { autocomplete: [] },
+  });
 
-  const addForm = (data: any) =>
-    axios
-      .post('https://localhost:44328/api/grupo', data)
-      .then(response => {
-        console.log(response.data)
-        refreshPage()
-      })
-      .catch(error => {
-        console.log(error)
-      })
+  useEffect(() => {
+    axios.get("https://localhost:44328/api/classific").then((response) => {
+      setNameClassific(response.data);
+    });
+  }, []);
+  console.log("alo: ", NameClassific);
+
+  const addForm = (data: any) => {
+    console.log(data);
+    // axios
+    //   .post("https://localhost:44328/api/grupo", data)
+    //   .then((response) => {
+    //     console.log(response.data);
+    //     refreshPage();
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+  };
+  type Option = {
+    DS_Classificacao: string;
+    // CD_ITEM: string;
+  };
+
+  type FormValues = {
+    autocomplete: NestedValue<Option[]>;
+  };
 
   return (
     <>
@@ -30,8 +54,8 @@ export const ModalGroup = () => {
           render={({ field }) => (
             <select {...field} className="active_content">
               <option>Status</option>
-              <option value={'true'}>Ativo</option>
-              <option value={'false'}>Inativo</option>
+              <option value={"true"}>Ativo</option>
+              <option value={"false"}>Inativo</option>
             </select>
           )}
           control={control}
@@ -48,7 +72,7 @@ export const ModalGroup = () => {
             type="text"
             id="grupo"
             className="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm"
-            {...register('DS_Grupo')}
+            {...register("DS_Grupo")}
             placeholder=""
           />
         </div>
@@ -64,10 +88,28 @@ export const ModalGroup = () => {
             type="date"
             id="date"
             className="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm"
-            {...register('Data')}
+            {...register("Data")}
             placeholder=""
           />
         </div>
+        <section>
+          <label>React Select</label>
+          <Controller
+            name="ID_Class_Pec"
+            control={control}
+            render={({ field }) => (
+              <ReactSelect
+                isClearable
+                {...field}
+                options={[
+                  { value: "1", label: "Render+" },
+                  { value: "2", label: "Strawberry" },
+                  { value: "3", label: "Vanilla" },
+                ]}
+              />
+            )}
+          />
+        </section>
 
         <button
           type="submit"
@@ -76,8 +118,7 @@ export const ModalGroup = () => {
           Salvar
         </button>
       </form>
-		<BoxClassific/>
-
+      {/* <BoxClassific/> */}
     </>
-  )
-}
+  );
+};

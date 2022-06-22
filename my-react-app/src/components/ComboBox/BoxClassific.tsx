@@ -9,24 +9,24 @@ function refreshPage() {
 }
 
 export const BoxClassific = () => {
-  const [NameClassific, setNameClassific] = useState<any[]>([]);
+  const [NameProduto, setNameProduto] = useState<any[]>([]);
   const { handleSubmit, setValue } = useForm<FormValues>({
     defaultValues: { autocomplete: [] },
   });
 
   useEffect(() => {
-    axios.get("https://localhost:44328/api/classific").then((response) => {
-      setNameClassific(response.data);
+    axios.get("https://localhost:44328/api/maters").then((response) => {
+      setNameProduto(response.data);
     });
   }, []);
 
-//   const fetchClientes = () => {
-//     axios.get("https://localhost:44328/api/maters").then((response) => {
-//       setNameProduto(response.data);
-//     });
-//   };
+  const fetchClientes = () => {
+    axios.get("https://localhost:44328/api/classific").then((response) => {
+      setNameProduto(response.data);
+    });
+  };
 
-  const addClassific = (data: any) => {
+  const addProduto = (data: any) => {
     // const cdOnly = data.autocomplete.map(({ CD_ITEM }) => ({
     //   ID_InvestCampanha: id.id[0].ID,
     //   ID_Produto: CD_ITEM,
@@ -39,7 +39,7 @@ export const BoxClassific = () => {
     // console.log("cdOnly: ", cdOnly);
     // cdOnly.map((dados: any) => {
     //   axios
-    //     .post("https://localhost:44328/api/campanhaproduto", dados)
+    //     .post("https://localhost:44328/api/grupo", dados)
     //     .then((response) => {
     //       console.log(response);
     //     })
@@ -52,8 +52,8 @@ export const BoxClassific = () => {
   };
 
   type Option = {
-    DS_Classificacao: string;
-    // CD_ITEM: string;
+    DS_ITEM: string;
+    CD_ITEM: string;
   };
 
   type FormValues = {
@@ -62,15 +62,15 @@ export const BoxClassific = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit(addClassific)}>
+      <form onSubmit={handleSubmit(addProduto)}>
         <section>
           <label>
             Adicionar produto a Campanha <b> </b>
           </label>
           <Autocomplete
             multiple
-            options={NameClassific}
-            getOptionLabel={(option: Option) => option.DS_Classificacao}
+            options={NameProduto}
+            getOptionLabel={(option: Option) => option.DS_ITEM}
             onChange={(e, options) => setValue("autocomplete", options)}
             renderInput={(params) => <TextField {...params} />}
           />
