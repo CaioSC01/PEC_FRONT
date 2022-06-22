@@ -51,7 +51,6 @@ export const EditGroup = (id: any) => {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
-    console.log(id);
     if (!window.confirm("Deseja realmente excluir este post?")) return;
 
     try {
@@ -67,6 +66,7 @@ export const EditGroup = (id: any) => {
   };
 
   const editForm = (data: any) => {
+    // console.log(data);
     axios
       .put(`https://localhost:44328/api/grupo/${id.id.ID}`, data)
       .then(() => {
@@ -77,37 +77,30 @@ export const EditGroup = (id: any) => {
         console.log("DEU ERRADO", data, id);
       });
   };
-
+  console.log(id.id.ID_Class_Pec);
   return (
     <>
       <form onSubmit={handleSubmit(editForm)}>
-        <Controller
-          render={({ field }) => (
-            <select {...field} className="active_content">
-              {id.id.Status}
-              <option>Status</option>
-              <option value={"true"}>Ativo</option>
-              <option value={"false"}>Inativo</option>
-            </select>
-          )}
-          control={control}
-          name="Status"
-        />
-        <Controller
-          render={({ field }) => (
-            <select
-              {...field}
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-r-lg border-l-gray-100 dark:border-l-gray-700 border-l-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            >
-              <option>Classificação</option>
-              {NameClassific.map((name) => (
-                <option value={name.ID}>{name.DS_Classificacao}</option>
-              ))}
-            </select>
-          )}
-          control={control}
-          name="ID_Class_Pec"
-        />
+        <select
+          {...register("Status")}
+          className="active_content2"
+          defaultValue={id.id.Status}
+        >
+          <option value={"true"}>Ativo</option>
+          <option value={"false"}>Inativo</option>
+        </select>
+        <select
+          {...register("ID_Class_Pec")}
+          className="active_content2"
+          defaultValue={id.id.ID_Class_Pec}
+        >
+          <option value={id.id.ID_Class_Pec}>{id.id.ID_Class_Pec}</option>
+          {NameClassific.map((name) => (
+            <>
+              <option value={name.ID}>{name.DS_Classificacao}</option>
+            </>
+          ))}
+        </select>
         <div className="relative border border-gray-300 rounded-md px-3 py-2 shadow-sm focus-within:ring-1 focus-within:ring-indigo-600 focus-within:border-indigo-600 modal_content">
           <label
             htmlFor="name"
@@ -120,26 +113,9 @@ export const EditGroup = (id: any) => {
             id="grupo"
             className="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm"
             {...register("DS_Grupo")}
-            placeholder={id.id.DS_Grupo}
+            defaultValue={id.id.DS_Grupo}
           />
         </div>
-
-        <div className="relative border border-gray-300 rounded-md px-3 py-2 shadow-sm focus-within:ring-1 focus-within:ring-indigo-600 focus-within:border-indigo-600 modal_content">
-          <label
-            htmlFor="name"
-            className="absolute -top-2 left-2 -mt-px inline-block px-1 bg-white text-xs font-medium text-gray-900"
-          >
-            Data
-          </label>
-          <input
-            type="date"
-            id="date"
-            className="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm"
-            {...register("Data")}
-            placeholder={id.id.Data}
-          />
-        </div>
-
         <button
           type="submit"
           className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-[#9a8e74] hover:bg-[#b5aa92] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"

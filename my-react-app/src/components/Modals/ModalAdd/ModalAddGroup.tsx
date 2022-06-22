@@ -2,6 +2,11 @@ import { ChangeEvent, useEffect, useState } from "react";
 import axios from "axios";
 import { Controller, NestedValue, useForm } from "react-hook-form";
 import "./Style/modalGroup.css";
+import ReactSelect from "react-select";
+// import { TableClient } from "../../ComboBox/BoxGrupo";
+// import { BoxClassific } from "../../ComboBox/BoxClassific";
+import { Autocomplete } from "@material-ui/lab";
+import { TextField } from "@material-ui/core";
 
 function refreshPage() {
   window.location.reload();
@@ -9,15 +14,18 @@ function refreshPage() {
 // onChange={handleStatusChange}
 export const ModalGroup = () => {
   const { control, register, handleSubmit } = useForm();
+  const [NameClassific, setNameClassific] = useState<any[]>([]);
+  
 
   useEffect(() => {
     axios.get("https://localhost:44328/api/classific").then((response) => {
       setNameClassific(response.data);
     });
   }, []);
+  console.log("alo: ", NameClassific);
 
-
-  const addForm = (data: any) =>
+  const addForm = (data: any) => {
+    console.log(data);
     axios
       .post("https://localhost:44328/api/grupo", data)
       .then((response) => {
@@ -27,13 +35,22 @@ export const ModalGroup = () => {
       .catch((error) => {
         console.log(error);
       });
+  };
+//   type Option = {
+//     DS_Classificacao: string;
+    // CD_ITEM: string;
+//   };
 
-  return (
+//   type FormValues = {
+//     autocomplete: NestedValue<Option[]>;
+//   };
+
+return (
     <>
       <form onSubmit={handleSubmit(addForm)}>
         <Controller
           render={({ field }) => (
-            <select {...field} className="active_content">
+            <select {...field} className="active_content2">
               <option>Status</option>
               <option value={"true"}>Ativo</option>
               <option value={"false"}>Inativo</option>
@@ -41,11 +58,12 @@ export const ModalGroup = () => {
           )}
           control={control}
           name="Status"
+		  
         />
         <Controller
           render={({ field }) => (
             <select {...field} className="active_content">
-              <option>Status</option>
+              <option>Classificacao</option>
               {NameClassific.map((name) => (
                 <option value={name.ID}>{name.DS_Classificacao}</option>
               ))}
@@ -70,7 +88,7 @@ export const ModalGroup = () => {
           />
         </div>
 
-        <div className="relative border border-gray-300 rounded-md px-3 py-2 shadow-sm focus-within:ring-1 focus-within:ring-indigo-600 focus-within:border-indigo-600 modal_content">
+        {/* <div className="relative border border-gray-300 rounded-md px-3 py-2 shadow-sm focus-within:ring-1 focus-within:ring-indigo-600 focus-within:border-indigo-600 modal_content">
           <label
             htmlFor="name"
             className="absolute -top-2 left-2 -mt-px inline-block px-1 bg-white text-xs font-medium text-gray-900"
@@ -84,7 +102,7 @@ export const ModalGroup = () => {
             {...register("Data")}
             placeholder=""
           />
-        </div>
+        </div> */}
 
         <button
           type="submit"

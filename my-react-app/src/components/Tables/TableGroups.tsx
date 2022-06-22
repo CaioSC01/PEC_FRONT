@@ -28,7 +28,6 @@ export const TableGroups = () => {
   const [groups, setGroups] = useState<any[]>([]);
   const [dados, setDados] = useState<any[]>([]);
   const [NameClassific, setNameClassific] = useState<any[]>([]);
-
   useEffect(() => {
     axios
       .get("https://localhost:44328/api/grupo")
@@ -113,14 +112,14 @@ export const TableGroups = () => {
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           <div className="text-gray-900">
-                            {/* {group.ID_Class_Pec} */}
+                           
                             {NameClassific.map((name) => {
                               return (
                                 <>
                                   <div className="text-sm font-medium text-gray-900">
                                     {group.ID_Class_Pec == name.ID ? (
                                       <div>{name.DS_Classificacao}</div>
-                                    ) : (
+                                    ) : ( 
                                       ""
                                     )}
                                   </div>
