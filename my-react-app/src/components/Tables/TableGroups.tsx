@@ -27,24 +27,16 @@ export const TableGroups = () => {
   const handleCloseP = () => setShowP(false);
   const [groups, setGroups] = useState<any[]>([]);
   const [dados, setDados] = useState<any[]>([]);
-  const [Clientes, setClientes] = useState<any[]>([]);
-  const [NameClientes, setNameClientes] = useState<any[]>([]);
+  const [NameClassific, setNameClassific] = useState<any[]>([]);
 
   useEffect(() => {
     axios
       .get("https://localhost:44328/api/grupo")
       .then((response) => {
         setGroups(response.data);
-        axios
-          .get(`https://localhost:44328/api/GrupoCliente`)
-          .then((response) => {
-            setClientes(response.data);
-            axios
-              .get(`https://localhost:44328/api/clientes`)
-              .then((response) => {
-                setNameClientes(response.data);
-              });
-          });
+        axios.get(`https://localhost:44328/api/classific`).then((response) => {
+          setNameClassific(response.data);
+        });
       })
       .catch(() => {
         console.log("DEU ERRADO");
@@ -87,14 +79,18 @@ export const TableGroups = () => {
                         scope="col"
                         className="px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
+                        Classificação
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
                         Status
                       </th>
 
                       <th
                         scope="col"
-
                         className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
-
                       >
                         Ações
                         <span className="sr-only">Edit</span>
@@ -114,29 +110,24 @@ export const TableGroups = () => {
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           <div className="text-gray-900">{group.DS_Grupo}</div>
-
-                          {/* <div className="text-gray-500">
-                            Seara, josefa .. */}
-                            {/* {Clientes.map((clientes) => {
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          <div className="text-gray-900">
+                            {/* {group.ID_Class_Pec} */}
+                            {NameClassific.map((name) => {
                               return (
                                 <>
-                                  {NameClientes.map((name) => {
-                                    return (
-                                      <div className="text-gray-500">
-                                        {clientes.ID_Cliente ==
-                                          name.CD_PESSOA &&
-                                        clientes.ID_Grupo == group.ID ? (
-                                          <p> {name.NM_GUERRA}</p>
-                                        ) : (
-                                          ""
-                                        )}
-                                      </div>
-                                    );
-                                  })}
+                                  <div className="text-sm font-medium text-gray-900">
+                                    {group.ID_Class_Pec == name.ID ? (
+                                      <div>{name.DS_Classificacao}</div>
+                                    ) : (
+                                      ""
+                                    )}
+                                  </div>
                                 </>
                               );
-                            })} */}
-                          {/* </div> */}
+                            })}
+                          </div>
                         </td>
                         <td className="whitespace-nowrap px-1 py-4 text-sm text-gray-500">
                           <div
@@ -188,7 +179,6 @@ export const TableGroups = () => {
                       </tr>
                     ))}
                   </tbody>
-
                 </table>
                 {dados.map((dados) => {
                   return (

@@ -1,76 +1,82 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import { Controller, useForm } from 'react-hook-form'
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Controller, useForm } from "react-hook-form";
 // import './Style/modalGroup.css'
-import { TableClient } from '../../ComboBox/BoxGrupo'
-import { TrashIcon } from '@heroicons/react/outline'
+import { TableClient } from "../../ComboBox/BoxGrupo";
+import { TrashIcon } from "@heroicons/react/outline";
 
 function refreshPage() {
-  window.location.reload()
+  window.location.reload();
 }
 export const EditGroup = (id: any) => {
-  const { control, register, handleSubmit } = useForm()
-  const [Clientes, setClientes] = useState<any[]>([])
-  const [NameCliente, setNameCliente] = useState<any[]>([])
+  const { control, register, handleSubmit } = useForm();
+  const [Clientes, setClientes] = useState<any[]>([]);
+  const [NameCliente, setNameCliente] = useState<any[]>([]);
+  const [NameClassific, setNameClassific] = useState<any[]>([]);
 
   useEffect(() => {
     axios
       .get(`https://localhost:44328/api/GrupoCliente/${id.id.ID}`)
-      .then(response => {
-        setClientes(response.data)
-        axios.get('https://localhost:44328/api/clientes').then(response => {
-          setNameCliente(response.data)
-        })
+      .then((response) => {
+        setClientes(response.data);
+        axios.get("https://localhost:44328/api/clientes").then((response) => {
+          setNameCliente(response.data);
+        });
       })
       .catch(() => {
-        console.log('DEU ERRADO')
-      })
-  }, [])
+        console.log("DEU ERRADO");
+      });
+    axios.get("https://localhost:44328/api/classific").then((response) => {
+      setNameClassific(response.data);
+    });
+  }, []);
 
   const fetchClientes = () => {
     axios
       .get(`https://localhost:44328/api/GrupoCliente/${id.id.ID}`)
-      .then(response => {
-        setClientes(response.data)
-        axios.get('https://localhost:44328/api/clientes').then(response => {
-          setNameCliente(response.data)
-        })
+      .then((response) => {
+        setClientes(response.data);
+        axios.get("https://localhost:44328/api/clientes").then((response) => {
+          setNameCliente(response.data);
+        });
       })
       .catch(() => {
-        console.log('DEU ERRADO')
-      })
-  }
+        console.log("DEU ERRADO");
+      });
+  };
 
   const deleteForm = (
     id_grupo: any,
     id: any,
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    e.preventDefault()
-    console.log(id)
-    if (!window.confirm('Deseja realmente excluir este post?')) return
+    e.preventDefault();
+    console.log(id);
+    if (!window.confirm("Deseja realmente excluir este post?")) return;
 
     try {
-      axios.delete(`https://localhost:44328/api/grupocliente/${id_grupo}/${id}`)
-      alert('Post excluído com sucesso')
-      fetchClientes()
+      axios.delete(
+        `https://localhost:44328/api/grupocliente/${id_grupo}/${id}`
+      );
+      alert("Post excluído com sucesso");
+      fetchClientes();
     } catch (error) {
-      console.log(error)
-      alert('Não foi excluir o post.')
+      console.log(error);
+      alert("Não foi excluir o post.");
     }
-  }
+  };
 
   const editForm = (data: any) => {
     axios
       .put(`https://localhost:44328/api/grupo/${id.id.ID}`, data)
       .then(() => {
-        console.log('Deu tudo certo', data)
-        refreshPage()
+        console.log("Deu tudo certo", data);
+        refreshPage();
       })
       .catch(() => {
-        console.log('DEU ERRADO', data, id)
-      })
-  }
+        console.log("DEU ERRADO", data, id);
+      });
+  };
 
   return (
     <>
@@ -80,12 +86,27 @@ export const EditGroup = (id: any) => {
             <select {...field} className="active_content">
               {id.id.Status}
               <option>Status</option>
-              <option value={'true'}>Ativo</option>
-              <option value={'false'}>Inativo</option>
+              <option value={"true"}>Ativo</option>
+              <option value={"false"}>Inativo</option>
             </select>
           )}
           control={control}
           name="Status"
+        />
+        <Controller
+          render={({ field }) => (
+            <select
+              {...field}
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-r-lg border-l-gray-100 dark:border-l-gray-700 border-l-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              <option>Classificação</option>
+              {NameClassific.map((name) => (
+                <option value={name.ID}>{name.DS_Classificacao}</option>
+              ))}
+            </select>
+          )}
+          control={control}
+          name="ID_Class_Pec"
         />
         <div className="relative border border-gray-300 rounded-md px-3 py-2 shadow-sm focus-within:ring-1 focus-within:ring-indigo-600 focus-within:border-indigo-600 modal_content">
           <label
@@ -98,7 +119,7 @@ export const EditGroup = (id: any) => {
             type="text"
             id="grupo"
             className="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm"
-            {...register('DS_Grupo')}
+            {...register("DS_Grupo")}
             placeholder={id.id.DS_Grupo}
           />
         </div>
@@ -114,7 +135,7 @@ export const EditGroup = (id: any) => {
             type="date"
             id="date"
             className="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm"
-            {...register('Data')}
+            {...register("Data")}
             placeholder={id.id.Data}
           />
         </div>
@@ -151,7 +172,7 @@ export const EditGroup = (id: any) => {
             </th>
           </tr>
         </thead>
-        {Clientes.map(clientes => {
+        {Clientes.map((clientes) => {
           return (
             <React.Fragment key={clientes.ID}>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -159,18 +180,18 @@ export const EditGroup = (id: any) => {
                   <td className="px-2 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="ml-4">
-                        {NameCliente.map(name => {
+                        {NameCliente.map((name) => {
                           return (
                             <>
                               <div className="text-sm font-medium text-gray-900">
                                 {clientes.ID_Cliente == name.CD_PESSOA ? (
                                   <div>{name.NM_GUERRA}</div>
                                 ) : (
-                                  ''
+                                  ""
                                 )}
                               </div>
                             </>
-                          )
+                          );
                         })}
                       </div>
                     </div>
@@ -180,17 +201,17 @@ export const EditGroup = (id: any) => {
                     <div
                       className={
                         clientes.Status === true
-                          ? 'inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-green-100 text-green-800'
-                          : 'inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-red-100 text-red-800'
+                          ? "inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-green-100 text-green-800"
+                          : "inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-red-100 text-red-800"
                       }
                     >
-                      {clientes.Status === true ? 'Ativo' : 'Inativo'}
+                      {clientes.Status === true ? "Ativo" : "Inativo"}
                     </div>
                   </td>
                   <td className="px-2 py-4 whitespace-nowrap">
                     <button
                       className="text-gray-400 hover:text-gray-100  ml-2"
-                      onClick={e =>
+                      onClick={(e) =>
                         deleteForm(clientes.ID_Grupo, clientes.ID_Cliente, e)
                       }
                     >
@@ -201,9 +222,9 @@ export const EditGroup = (id: any) => {
                 </tr>
               </tbody>
             </React.Fragment>
-          )
+          );
         })}
       </table>
     </>
-  )
-}
+  );
+};
