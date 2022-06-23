@@ -47,7 +47,7 @@ export const ModalEdit = (id: any) => {
             id="classificacao"
             className="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm"
             {...register('DS_Classificacao')}
-            placeholder={id.id.DS_Classificacao}
+            defaultValue={id.id.DS_Classificacao}
           />
         </div>
 

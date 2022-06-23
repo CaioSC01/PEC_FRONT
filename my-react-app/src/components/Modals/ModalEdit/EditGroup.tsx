@@ -89,15 +89,16 @@ export const EditGroup = (id: any) => {
           <option value={"true"}>Ativo</option>
           <option value={"false"}>Inativo</option>
         </select>
-        <select
-          {...register("ID_Class_Pec")}
-          className="active_content2"
-          defaultValue={id.id.ID_Class_Pec}
-        >
-          <option value={id.id.ID_Class_Pec}>{id.id.ID_Class_Pec}</option>
+        <select {...register("ID_Class_Pec")} className="active_content2">
           {NameClassific.map((name) => (
             <>
-              <option value={name.ID}>{name.DS_Classificacao}</option>
+              {name.ID == id.id.ID_Class_Pec ? (
+                <option value={name.ID} selected>
+                  {name.DS_Classificacao}
+                </option>
+              ) : (
+                <option value={name.ID}>{name.DS_Classificacao}</option>
+              )}
             </>
           ))}
         </select>
